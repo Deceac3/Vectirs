@@ -1,14 +1,26 @@
 #include "updata_load.h"
 
 _Bool vect_first_init(struct vectors* buff){
-    return true;
+    buff->ptr=malloc(sizeof(union vectors_data)*STEP);
+    if (buff->ptr != NULL)
+    {
+        buff->size = STEP;
+        buff->count = 0;
+        return true;
+    }
+    else
+    {
+        printf("Выделение памяти не произошло(");
+        return false;
+    }
+    
 }
 
 //Чёрт, нам же надо хранить каждый объект........... фак
-_Bool int_vect_size_up(struct vectors* buff){
-    buff->int_arr.ptr=realloc(buff->int_arr.ptr, (buff->int_arr.size+STEP)*sizeof(int));
-    if(buff->int_arr.ptr!=NULL){
-        buff->int_arr.size+=STEP;
+_Bool vect_size_up(struct vectors* buff){
+    buff->ptr=realloc(buff->ptr, (buff->size+STEP)*sizeof(union vectors_data));
+    if(buff->ptr!=NULL){
+        buff->size+=STEP;
         return true;
     }
     else{
@@ -16,18 +28,18 @@ _Bool int_vect_size_up(struct vectors* buff){
     }
 }
 
-_Bool int_vect_back(struct vectors* buff, int buf){
-    if (buff->int_arr.size>= buff->int_arr.count+1)
+_Bool vect_back(struct vectors* buff, union vectors_data buf){
+    if (buff->size>= buff->count+1)
     {
-        buff->int_arr.ptr[buff->int_arr.count+1]=buf;
-        buff->int_arr.count++;
+        buff->ptr[buff->count+1]=buf;
+        buff->count++;
         return true;
     }
     else
     {
         if(int_vect_size_up(buff)){
-            buff->int_arr.ptr[buff->int_arr.count+1]=buf;
-            buff->int_arr.count++;
+            buff->ptr[buff->count+1]=buf;
+            buff->count++;
             return true;
         }
         else{
@@ -36,9 +48,9 @@ _Bool int_vect_back(struct vectors* buff, int buf){
     }
 }
 
-_Bool vect_set_item_int(struct vectors* buff, int indx, int buf){
-    if(buff->int_arr.count>=(indx-1)){
-        buff->int_arr.ptr[indx]==buf;
+_Bool vect_set_item(struct vectors* buff, int indx, union vectors_data buf){
+    if(buff->count>=(indx-1)){
+        buff->ptr[indx]==buf;
         return true;
     }
     else
@@ -106,12 +118,3 @@ _Bool vect_shrink_int(struct vectors* buff){
 }
 
 /*###### Z ZZ Z ZZ Z ZABIL ##### # #*/
-
-_Bool char_vect_back(struct vectors* buff, int buf){
-    
-}
-
-_Bool char_vect_size_up(struct vectors* buff){
-    buff->char_arr.size+=STEP;
-    buff->char_arr.ptr=realloc(buff->char_arr.ptr, buff->char_arr.size+STEP);
-}
