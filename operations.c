@@ -49,7 +49,7 @@ _Bool vect_back(struct vectors* buff, union vectors_data buf){
 }
 
 _Bool vect_set_item(struct vectors* buff, int indx, union vectors_data buf){
-    if(buff->count>=(indx-1)){
+    if(buff->count>=(indx-1)){ 
         buff->ptr[indx]==buf;
         return true;
     }
@@ -60,13 +60,13 @@ _Bool vect_set_item(struct vectors* buff, int indx, union vectors_data buf){
     }
 }
 
-_Bool vect_del_item_int(struct vectors* buff, int indx){
+_Bool vect_del_item(struct vectors* buff, int indx){
     if (indx>=0)
     {
-        if (buff->int_arr.count>=(indx-1))
+        if (buff->count>=(indx-1))
         {
-            for(int i=indx;i<buff->int_arr.count;i--){
-                buff->int_arr.ptr[i]=buff->int_arr.ptr[i+1];
+            for(int i=indx;i<buff->count;i--){
+                buff->ptr[i]=buff->ptr[i+1];
             }
             return true;
         }
@@ -78,16 +78,16 @@ _Bool vect_del_item_int(struct vectors* buff, int indx){
     }
     else
     {
-        printf("Индекс должен быть больше 0 и меньше %d", buff->int_arr.count);
+        printf("Индекс должен быть больше 0 и меньше %d", buff->count);
         return false;
     }
     
 }
 
 _Bool vect_del_back_int(struct vectors* buff){
-    if(buff->int_arr.count!=0){
-        buff->int_arr.ptr[buff->int_arr.count]=0;
-        buff->int_arr.count--;
+    if(buff->count!=0){
+        buff->ptr[buff->count]=0;
+        buff->count--;
         return true;
     }
     else
@@ -98,12 +98,12 @@ _Bool vect_del_back_int(struct vectors* buff){
 }
 
 _Bool vect_shrink_int(struct vectors* buff){
-    if (buff->int_arr.count!=0)
+    if (buff->count!=0)
     {
-        buff->int_arr.ptr=realloc(buff->int_arr.ptr,buff->int_arr.count*sizeof(int));
-        if (buff->int_arr.ptr!=NULL)
+        buff->ptr=realloc(buff->ptr,buff->count*sizeof(int));
+        if (buff->ptr!=NULL)
         {
-            buff->int_arr.size=buff->int_arr.count;
+            buff->size=buff->count;
             return true;
         }
         else
@@ -113,7 +113,7 @@ _Bool vect_shrink_int(struct vectors* buff){
         }
     }
     else{
-        buff->int_arr.ptr=realloc(buff->int_arr.ptr,sizeof(int)*STEP);
+        buff->ptr=realloc(buff->ptr,sizeof(union vectors_data)*STEP);
     }
 }
 
