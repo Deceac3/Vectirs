@@ -1,5 +1,19 @@
 #include "updata_load.h"
 
+int IntPlayerChoose(){
+    char buf[80];
+    int x;
+    scanf("%d", &x);
+    if (fgets(buf, sizeof buf, stdin)){return x;}
+    else{
+        return 0;
+    }
+};
+
+_Bool vector_type_Indef(){
+
+}
+
 _Bool vect_first_init(struct vectors* buff){
     buff->ptr=malloc(sizeof(union vectors_data)*STEP);
     if (buff->ptr != NULL)

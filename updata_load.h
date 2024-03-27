@@ -7,15 +7,12 @@
 
 // нам надо инциализировать тип данных и заполнить его нулями
 _Bool vect_first_init(struct vectors*);
-
 _Bool vect_size_up(struct vectors*);
 _Bool vect_back(struct vectors*, union vectors_data);
 _Bool vect_set_item(struct vectors*, int, union vectors_data);
 _Bool vect_del_back(struct vectors*);
 _Bool vect_del_item(struct vectors*, int);
 _Bool vect_shrink(struct vectors*);
-
-_Bool char_vect_size_up(struct vectors*);
 
 union vectors_data
 {
