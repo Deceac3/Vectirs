@@ -1,10 +1,10 @@
-#include "updata_load.h"
+#include "operations.c"
 
 int main(){
     struct vectors vector;
     if (vect_first_init(&vector))
     {
-        /* code */
+        stdiput_OP(&vector);
     }
     else
     {

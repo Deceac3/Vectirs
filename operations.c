@@ -1,19 +1,5 @@
 #include "updata_load.h"
 
-int IntPlayerChoose(){
-    char buf[80];
-    int x;
-    scanf("%d", &x);
-    if (fgets(buf, sizeof buf, stdin)){return x;}
-    else{
-        return 0;
-    }
-};
-
-_Bool vector_type_Indef(){
-
-}
-
 _Bool vect_first_init(struct vectors* buff){
     buff->ptr=malloc(sizeof(union vectors_data)*STEP);
     if (buff->ptr != NULL)
@@ -51,7 +37,7 @@ _Bool vect_back(struct vectors* buff, union vectors_data buf){
     }
     else
     {
-        if(int_vect_size_up(buff)){
+        if(vect_size_up(buff)){
             buff->ptr[buff->count+1]=buf;
             buff->count++;
             return true;
@@ -64,7 +50,7 @@ _Bool vect_back(struct vectors* buff, union vectors_data buf){
 
 _Bool vect_set_item(struct vectors* buff, int indx, union vectors_data buf){
     if(buff->count>=(indx-1)){ 
-        buff->ptr[indx]==buf;
+        
         return true;
     }
     else
@@ -100,7 +86,7 @@ _Bool vect_del_item(struct vectors* buff, int indx){
 
 _Bool vect_del_back_int(struct vectors* buff){
     if(buff->count!=0){
-        buff->ptr[buff->count]=0;
+        
         buff->count--;
         return true;
     }
@@ -132,3 +118,93 @@ _Bool vect_shrink_int(struct vectors* buff){
 }
 
 /*###### Z ZZ Z ZZ Z ZABIL ##### # #*/
+
+_Bool stdiput_OP(struct vectors* vector){
+    char buf[MAX];
+    if(fgets(buf, MAX, stdin)!=NULL){
+        switch (type_check(buf))
+        {
+        case 1:
+            *vector->ptr->text=*buf;
+            break;
+        case 2:
+            //printf("%p k %p",strtod(buf,strchr(buf,'\n')), strtod(buf,strchr(buf,'\n')-1));
+            vector->ptr->vb=strtod(buf,strchr(buf,'\n'));
+            break;
+        case 3:
+
+            vector->ptr->vunsiglong;
+            break;
+        case 4:
+
+            vector->ptr->vunsigint;
+            break;
+        case 5:
+
+            vector->ptr->vlong;
+            break;
+        case 6:
+
+            vector->ptr->vint;
+            break;
+        case 7:
+        
+            vector->ptr->vshort;
+            break;
+        case 8:
+            vector->ptr->vchar=&buf;
+            return true;
+            break;
+        default:
+            break;
+        }
+        return false;
+    }
+    else
+    {
+        printf("Считывание ввода не произошло!");
+        return false;
+    }    
+}
+
+int type_check(char buf[MAX]){
+    char sep[2] = {" "};
+    char *istr;
+    strchr(buf, '\n')[0]='\0';
+    buf=strtok(buf,sep);
+    if (strlen(buf)==1){
+        istr=strtok(NULL,sep);
+        if(istr==NULL){
+            return 8;
+        }
+        else{
+            return 1;
+        }
+    }
+    istr = strchr(buf, '.');
+    if(istr!= NULL){
+        istr=strtok(buf,sep);
+        istr=strtok(NULL,sep);
+        if(istr==NULL){
+            char sepd[2] = {'.'};
+            istr=strtok(buf,sepd);
+            istr=strtok(NULL,sepd);
+            istr=strtok(NULL,sepd);
+            if (istr==NULL)
+            {
+                printf("2");
+                return 2;
+            }
+            else{
+                printf("1");
+                return 1;
+            }
+        }
+        else{
+            return 1;
+        }
+    }
+    else if(1){
+
+    }
+}
