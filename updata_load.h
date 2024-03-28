@@ -9,7 +9,7 @@
 union vectors_data
 {
     char text[MAX];      //1
-    double vb;           //2
+    double vd;           //2
     unsigned long vunsiglong;//3
     unsigned int vunsigint;//4
     long vlong;         //5
@@ -34,3 +34,5 @@ _Bool vect_set_item(struct vectors*, int, union vectors_data);
 _Bool vect_del_back(struct vectors*);
 _Bool vect_del_item(struct vectors*, int);
 _Bool vect_shrink(struct vectors*);
+
+int type_check(char buf[MAX]);

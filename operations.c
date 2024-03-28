@@ -114,6 +114,7 @@ _Bool vect_shrink_int(struct vectors* buff){
     }
     else{
         buff->ptr=realloc(buff->ptr,sizeof(union vectors_data)*STEP);
+        return true;
     }
 }
 
@@ -122,37 +123,49 @@ _Bool vect_shrink_int(struct vectors* buff){
 _Bool stdiput_OP(struct vectors* vector){
     char buf[MAX];
     if(fgets(buf, MAX, stdin)!=NULL){
+        char** bufer;
         switch (type_check(buf))
         {
         case 1:
             *vector->ptr->text=*buf;
+            return true;
             break;
         case 2:
-            //printf("%p k %p",strtod(buf,strchr(buf,'\n')), strtod(buf,strchr(buf,'\n')-1));
-            vector->ptr->vb=strtod(buf,strchr(buf,'\n'));
+            vector->ptr->vd=strtod(buf,bufer);
+            return true;
             break;
         case 3:
-
-            vector->ptr->vunsiglong;
+            unsigned long buff;
+            buff =strtol(buf,bufer,0);
+            vector->ptr->vunsiglong=buff;
+            return true;
             break;
         case 4:
-
-            vector->ptr->vunsigint;
+            unsigned long buff1;
+            buff1 =(unsigned int)strtol(buf,bufer,0);
+            vector->ptr->vunsigint=buff1;
+            return true;
             break;
         case 5:
-
-            vector->ptr->vlong;
+            long int buff2;
+            buff2 = atol(buf);
+            vector->ptr->vlong=buff2;
+            return true;
             break;
         case 6:
-
-            vector->ptr->vint;
+            int buff3;
+            buff3 = atoi(buf);
+            vector->ptr->vint=buff3;
+            return true;
             break;
         case 7:
-        
-            vector->ptr->vshort;
+            int buff4;
+            buff4 = (short)atoi(buf);
+            vector->ptr->vshort=buff4;
+            return true;
             break;
         case 8:
-            vector->ptr->vchar=&buf;
+            vector->ptr->vchar=buf[0];
             return true;
             break;
         default:
@@ -204,7 +217,71 @@ int type_check(char buf[MAX]){
             return 1;
         }
     }
-    else if(1){
-
+    //That mean we need to convert it to signed type
+    istr = strchr(buf, '-');
+    if(istr!=NULL){
+        istr=strtok(buf,sep);
+        istr=strtok(NULL,sep);
+        if(istr==NULL){
+            if (strlen(buf)<6)
+            {
+                int buff;
+                buff = atoi(buf);
+                if ((buff>=-32768) &&(buff<=32767))
+                {
+                    return 7;
+                }
+                else
+                {
+                    return 6;
+                }
+                
+            }
+            else if (strlen(buf)<11)
+            {
+                long int buff;
+                buff = atol(buf);
+                if ((buff>=-2147483648) &&(buff<=2147483647))
+                {
+                    return 6;
+                }
+                else
+                {
+                    return 5;
+                }
+            }
+            else{
+                return 5;
+            }
+        }
+        else{
+            return 1;
+        }
+    }
+    //Else we need convert it to unsigned type 
+    else{
+        istr=strtok(buf,sep);
+        istr=strtok(NULL,sep);
+        if(istr==NULL){
+            if (strlen(buf)<11)
+            {
+                unsigned long buff;
+                char** bufer;
+                buff =strtol(buf,bufer,0);
+                if (buff <=4294967295)
+                {
+                    return 4;
+                }
+                else{
+                    return 3;
+                }
+            }
+            else{
+                return 3;
+            }
+        }
+        else{
+            return 1;
+        }
     }
 }
