@@ -19,7 +19,8 @@ union vectors_data
 };
 
 struct vectors{
-    union vectors_data* ptr; 
+    union vectors_data** ptr;
+    char** data_ment; 
     int size;
     int count;
 };
@@ -34,5 +35,7 @@ _Bool vect_set_item(struct vectors*, int, union vectors_data);
 _Bool vect_del_back(struct vectors*);
 _Bool vect_del_item(struct vectors*, int);
 _Bool vect_shrink(struct vectors*);
+_Bool stdiput_OP(struct vectors*,int);
+_Bool moove_vector_left(struct vectors*,int);
 
 int type_check(char buf[MAX]);

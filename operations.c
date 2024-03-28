@@ -2,7 +2,8 @@
 
 _Bool vect_first_init(struct vectors* buff){
     buff->ptr=malloc(sizeof(union vectors_data)*STEP);
-    if (buff->ptr != NULL)
+    *buff->data_ment=malloc(sizeof(char)*STEP);
+    if ((buff->ptr != NULL) && (buff->data_ment!= NULL))
     {
         buff->size = STEP;
         buff->count = 0;
@@ -19,7 +20,8 @@ _Bool vect_first_init(struct vectors* buff){
 //Чёрт, нам же надо хранить каждый объект........... фак
 _Bool vect_size_up(struct vectors* buff){
     buff->ptr=realloc(buff->ptr, (buff->size+STEP)*sizeof(union vectors_data));
-    if(buff->ptr!=NULL){
+    *buff->data_ment=realloc(buff->data_ment, (buff->size+STEP)*sizeof(char));
+    if((buff->ptr!=NULL)&&(buff->data_ment!=NULL)){
         buff->size+=STEP;
         return true;
     }
@@ -31,16 +33,26 @@ _Bool vect_size_up(struct vectors* buff){
 _Bool vect_back(struct vectors* buff, union vectors_data buf){
     if (buff->size>= buff->count+1)
     {
-        buff->ptr[buff->count+1]=buf;
-        buff->count++;
-        return true;
+        if(stdiput_OP(buff,buff->count)){
+            buff->count++;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
     else
     {
         if(vect_size_up(buff)){
-            buff->ptr[buff->count+1]=buf;
-            buff->count++;
-            return true;
+            if(stdiput_OP(buff,buff->count)){
+                buff->count++;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         else{
             return false;
@@ -50,8 +62,14 @@ _Bool vect_back(struct vectors* buff, union vectors_data buf){
 
 _Bool vect_set_item(struct vectors* buff, int indx, union vectors_data buf){
     if(buff->count>=(indx-1)){ 
+        if(stdiput_OP(buff,indx)){
+            return true;
+        }
+        else
+        {
+            return false;
+        }
         
-        return true;
     }
     else
     {
@@ -65,9 +83,6 @@ _Bool vect_del_item(struct vectors* buff, int indx){
     {
         if (buff->count>=(indx-1))
         {
-            for(int i=indx;i<buff->count;i--){
-                buff->ptr[i]=buff->ptr[i+1];
-            }
             return true;
         }
         else
@@ -84,9 +99,60 @@ _Bool vect_del_item(struct vectors* buff, int indx){
     
 }
 
-_Bool vect_del_back_int(struct vectors* buff){
+_Bool moove_vector_left(struct vectors* vector,int indx){
+    for(int i = vector->count; i<vector->size;i++){
+        switch (*vector->data_ment[i])
+        {
+        case 1:
+            *vector->ptr[i]->text=*vector->ptr[i+1]->text;
+            vector->data_ment[i]=vector->data_ment[i+1];
+            return true;
+            break;
+        case 2:
+            vector->ptr[i]->vd=vector->ptr[i+1]->vd;
+            vector->data_ment[i]=vector->data_ment[i+1];
+            return true;
+            break;
+        case 3:
+            vector->ptr[i]->vunsiglong=vector->ptr[i+1]->vunsiglong;
+            vector->data_ment[i]=vector->data_ment[i+1];
+            return true;
+            break;
+        case 4:
+            vector->ptr[i]->vunsigint=vector->ptr[i+1]->vunsigint;
+            vector->data_ment[i]=vector->data_ment[i+1];
+            return true;
+            break;
+        case 5:
+            vector->ptr[i]->vlong=vector->ptr[i+1]->vlong;
+            vector->data_ment[i]=vector->data_ment[i+1];
+            return true;
+            break;
+        case 6:
+            vector->ptr[i]->vint=vector->ptr[i+1]->vint;
+            vector->data_ment[i]=vector->data_ment[i+1];
+            return true;
+            break;
+        case 7:
+            vector->ptr[i]->vshort=vector->ptr[i+1]->vshort;
+            vector->data_ment[i]=vector->data_ment[i+1];
+            return true;
+            break;
+        case 8:
+            vector->ptr[i]->vchar=vector->ptr[i+1]->vchar;
+            vector->data_ment[i]=vector->data_ment[i+1];
+            return true;
+            break;
+        default:
+            return false;
+            break;
+        }
+    }
+    return true;
+}
+
+_Bool vect_del_back(struct vectors* buff){
     if(buff->count!=0){
-        
         buff->count--;
         return true;
     }
@@ -97,11 +163,12 @@ _Bool vect_del_back_int(struct vectors* buff){
     
 }
 
-_Bool vect_shrink_int(struct vectors* buff){
+_Bool vect_shrink(struct vectors* buff){
     if (buff->count!=0)
     {
         buff->ptr=realloc(buff->ptr,buff->count*sizeof(int));
-        if (buff->ptr!=NULL)
+        buff->data_ment=realloc(buff->ptr,buff->count*sizeof(char));
+        if ((buff->ptr!=NULL)&&(buff->data_ment!=NULL))
         {
             buff->size=buff->count;
             return true;
@@ -120,55 +187,64 @@ _Bool vect_shrink_int(struct vectors* buff){
 
 /*###### Z ZZ Z ZZ Z ZABIL ##### # #*/
 
-_Bool stdiput_OP(struct vectors* vector){
+_Bool stdiput_OP(struct vectors* vector,int pos){
     char buf[MAX];
     if(fgets(buf, MAX, stdin)!=NULL){
         char** bufer;
         switch (type_check(buf))
         {
         case 1:
-            *vector->ptr->text=*buf;
+            *vector->ptr[pos]->text=*buf;
+            *vector->data_ment[pos]=(char)1;
             return true;
             break;
         case 2:
-            vector->ptr->vd=strtod(buf,bufer);
+            vector->ptr[pos]->vd=strtod(buf,bufer);
+            *vector->data_ment[pos]=(char)2;
             return true;
             break;
         case 3:
             unsigned long buff;
             buff =strtol(buf,bufer,0);
-            vector->ptr->vunsiglong=buff;
-            return true;
+            *vector->data_ment[pos]=(char)3;
+            vector->ptr[pos]->vunsiglong=buff;
+            return true;    
             break;
         case 4:
             unsigned long buff1;
             buff1 =(unsigned int)strtol(buf,bufer,0);
-            vector->ptr->vunsigint=buff1;
+            vector->ptr[pos]->vunsigint=buff1;
+            *vector->data_ment[pos]=(char)4;
             return true;
             break;
         case 5:
             long int buff2;
             buff2 = atol(buf);
-            vector->ptr->vlong=buff2;
+            vector->ptr[pos]->vlong=buff2;
+            *vector->data_ment[pos]=(char)5;
             return true;
             break;
         case 6:
             int buff3;
             buff3 = atoi(buf);
-            vector->ptr->vint=buff3;
+            vector->ptr[pos]->vint=buff3;
+            *vector->data_ment[pos]=(char)6;
             return true;
             break;
         case 7:
             int buff4;
             buff4 = (short)atoi(buf);
-            vector->ptr->vshort=buff4;
+            vector->ptr[pos]->vshort=buff4;
+            *vector->data_ment[pos]=(char)7;
             return true;
             break;
         case 8:
-            vector->ptr->vchar=buf[0];
+            vector->ptr[pos]->vchar=buf[0];
+            *vector->data_ment[pos]=(char)8;
             return true;
             break;
         default:
+            return false;
             break;
         }
         return false;
