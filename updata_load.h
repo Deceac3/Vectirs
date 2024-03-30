@@ -2,6 +2,12 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
+#ifdef _WIN32
+#include <Windows.h>
+#else
+#include <unistd.h>
+#endif
 
 #define STEP 4
 #define MAX 20
@@ -30,8 +36,8 @@ struct vectors{
 // нам надо инциализировать тип данных и заполнить его нулями
 _Bool vect_first_init(struct vectors*);
 _Bool vect_size_up(struct vectors*);
-_Bool vect_back(struct vectors*, union vectors_data);
-_Bool vect_set_item(struct vectors*, int, union vectors_data);
+_Bool vect_back(struct vectors*);
+_Bool vect_set_item(struct vectors*, int);
 _Bool vect_del_back(struct vectors*);
 _Bool vect_del_item(struct vectors*, int);
 _Bool vect_shrink(struct vectors*);

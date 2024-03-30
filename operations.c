@@ -1,8 +1,8 @@
 #include "updata_load.h"
-
+//We need first start for vectors
 _Bool vect_first_init(struct vectors* buff){
     buff->ptr=malloc(sizeof(union vectors_data)*STEP);
-    *buff->data_ment=malloc(sizeof(char)*STEP);
+    buff->data_ment=malloc(sizeof(char)*STEP);
     if ((buff->ptr != NULL) && (buff->data_ment!= NULL))
     {
         buff->size = STEP;
@@ -18,9 +18,10 @@ _Bool vect_first_init(struct vectors* buff){
 }
 
 //Чёрт, нам же надо хранить каждый объект........... фак
+//this function resized function to more space on STEP
 _Bool vect_size_up(struct vectors* buff){
     buff->ptr=realloc(buff->ptr, (buff->size+STEP)*sizeof(union vectors_data));
-    *buff->data_ment=realloc(buff->data_ment, (buff->size+STEP)*sizeof(char));
+    buff->data_ment=realloc(buff->data_ment, (buff->size+STEP)*sizeof(char));
     if((buff->ptr!=NULL)&&(buff->data_ment!=NULL)){
         buff->size+=STEP;
         return true;
@@ -29,8 +30,8 @@ _Bool vect_size_up(struct vectors* buff){
         return false;
     }
 }
-
-_Bool vect_back(struct vectors* buff, union vectors_data buf){
+//this function place item back to arr
+_Bool vect_back(struct vectors* buff){
     if (buff->size>= buff->count+1)
     {
         if(stdiput_OP(buff,buff->count)){
@@ -59,8 +60,8 @@ _Bool vect_back(struct vectors* buff, union vectors_data buf){
         }
     }
 }
-
-_Bool vect_set_item(struct vectors* buff, int indx, union vectors_data buf){
+//this function replace item with index
+_Bool vect_set_item(struct vectors* buff, int indx){
     if(buff->count>=(indx-1)){ 
         if(stdiput_OP(buff,indx)){
             return true;
@@ -77,7 +78,7 @@ _Bool vect_set_item(struct vectors* buff, int indx, union vectors_data buf){
         return false;
     }
 }
-
+//fuction to del the item with indx
 _Bool vect_del_item(struct vectors* buff, int indx){
     if (indx>=0)
     {
@@ -98,7 +99,7 @@ _Bool vect_del_item(struct vectors* buff, int indx){
     }
     
 }
-
+//its op function for del function to moove all items left
 _Bool moove_vector_left(struct vectors* vector,int indx){
     for(int i = vector->count; i<vector->size;i++){
         switch (*vector->data_ment[i])
@@ -154,7 +155,12 @@ _Bool moove_vector_left(struct vectors* vector,int indx){
 _Bool vect_del_back(struct vectors* buff){
     if(buff->count!=0){
         buff->count--;
-        return true;
+        if(vect_shrink(buff)){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
     else
     {
@@ -189,6 +195,8 @@ _Bool vect_shrink(struct vectors* buff){
 
 _Bool stdiput_OP(struct vectors* vector,int pos){
     char buf[MAX];
+    int x;
+    scanf("%d", &x);
     if(fgets(buf, MAX, stdin)!=NULL){
         char** bufer;
         switch (type_check(buf))
