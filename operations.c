@@ -35,6 +35,7 @@ _Bool vect_back(struct vectors* buff){
     if (buff->size>= buff->count+1)
     {
         if(stdiput_OP(buff,buff->count)){
+            printf("check3");
             buff->count++;
             return true;
         }
@@ -194,10 +195,13 @@ _Bool vect_shrink(struct vectors* buff){
 /*###### Z ZZ Z ZZ Z ZABIL ##### # #*/
 
 _Bool stdiput_OP(struct vectors* vector,int pos){
+    char buflol[MAX];
     char buf[MAX];
-    int x;
-    scanf("%d", &x);
-    if(fgets(buf, MAX, stdin)!=NULL){
+    scanf("%s",&buf);
+    sprintf();
+    printf("shluha");
+    if(fgets(buflol, sizeof(buflol), stdin)!=NULL){
+        printf("shluha");
         char** bufer;
         switch (type_check(buf))
         {

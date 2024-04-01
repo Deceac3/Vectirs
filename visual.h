@@ -41,14 +41,25 @@ _Bool visual_disp(struct vectors* vector){
         }
         break;
     case 4:                 //Delete the past item
-        return true;
+        if(vect_del_back(vector)){
+            return true;
+        }
+        else{
+            return false;
+        }
         break;
     case 5:                 //delete the item with index
-        return true;
+        int indxx = IntPlayerChoose();
+        if(vect_del_item(vector,indxx)){
+            return true;
+        }
+        else{
+            return false;
+        }
         break;
     case 6:                 //show item with index
-        int indx= IntPlayerChoose();
-        item_display(vector,indx);
+        int ind= IntPlayerChoose();
+        item_display(vector,ind);
         return true;
         break;
     default:
